@@ -164,12 +164,29 @@ img {
 }
 
 .cta {
-  margin-top: 1.5em;
+  margin-top: 2.5em;
+
+}
+
+.cta-scroll {
+  position: fixed;
+  bottom: 5%;
+  right: 2%;
+  transition: all 0.5s linear;
+  box-shadow: 0 0 0.75em 0.5em rgba(0, 0, 0, 0.4);
+  margin-top: 0;
+
+}
+
+.fa-download {
+  margin-right: 0.75rem;
 }
 
 .resume-download {
-  font-size: 1.25em;
+  font-size: 1em;
   padding: 1rem 1.5rem;
+  background-color: var(--main-red);
+  border-radius: 4px;
 }
 
 /* Projects section */
