@@ -136,6 +136,10 @@ img {
   padding-top: 12em;
 }
 
+.welcome-section > h1 {
+  padding: 0 2rem;
+}
+
 .typing-container > span {
   font-size: 3rem;
   font-weight: 200;
