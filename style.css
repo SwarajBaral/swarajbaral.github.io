@@ -143,7 +143,6 @@ img {
 .typing-container > span {
   font-size: 3rem;
   font-weight: 200;
-  font-style: italic;
   color: var(--main-red);
   display: inline;
 }
