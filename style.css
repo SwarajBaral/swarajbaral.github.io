@@ -163,6 +163,15 @@ img {
   color: var(--main-red);
 }
 
+.cta {
+  margin-top: 1.5em;
+}
+
+.resume-download {
+  font-size: 1.25em;
+  padding: 1rem 1.5rem;
+}
+
 /* Projects section */
 
 .projects-section {
