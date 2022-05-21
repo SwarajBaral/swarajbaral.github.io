@@ -191,6 +191,16 @@ img {
   gap: 3rem;
 }
 
+@media (max-width: 550px) {
+  .welcome-section {
+    height: auto;
+    padding-bottom: 5em;
+  }
+  .skill-tags {
+    grid-template-columns: repeat(3, auto);
+  }
+}
+
 .skill-tag {
   display: flex;
   align-items: center;
