@@ -1,0 +1,12 @@
+import React from 'react';
+const P = (props) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props} />;
+export const Play = () => <P><path d="M7 4.5v15l12-7.5z" fill="currentColor" stroke="none" /></P>;
+export const Pause = () => <P><path d="M7 4.5h3.5v15H7zM13.5 4.5H17v15h-3.5z" fill="currentColor" stroke="none" /></P>;
+export const Prev = () => <P><path d="M15 5l-7 7 7 7" /></P>;
+export const Next = () => <P><path d="M9 5l7 7-7 7" /></P>;
+export const Restart = () => <P><path d="M4 12a8 8 0 1 0 2.6-5.9" /><path d="M4 4v4h4" /></P>;
+export const Printer = () => <P><path d="M7 9V3h10v6" /><rect x="3" y="9" width="18" height="8" rx="2" /><path d="M7 14h10v7H7z" /></P>;
+export const Rotate = () => <P><path d="M20 12a8 8 0 0 1-14.3 4.9" /><path d="M4 12a8 8 0 0 1 14.3-4.9" /><path d="M18 3v4h-4M6 21v-4h4" /></P>;
+export const Target = () => <P><circle cx="12" cy="12" r="7" /><circle cx="12" cy="12" r="2" /></P>;
+export const Lines = () => <P><path d="M4 20 20 4M4 12l8-8M12 20l8-8" strokeDasharray="3 2.5" /></P>;
+export const Close = () => <P><path d="M6 6l12 12M18 6 6 18" /></P>;
