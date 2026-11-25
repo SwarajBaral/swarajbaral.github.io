@@ -3,7 +3,7 @@ import { buildModel, creasePattern } from './engine/fold.js';
 import { MODELS } from './models/index.js';
 import Viewer from './three/Viewer.jsx';
 import Diagram, { CreasePattern } from './ui/Diagram.jsx';
-import { KIND, PAPERS, stepLines, flatFinal } from './ui/meta.js';
+import { KIND, PAPERS, stepLines, flatFinal, paperLabel } from './ui/meta.js';
 import { player, usePlayer, stepIndexAt } from './store.js';
 import * as I from './ui/Icons.jsx';
 
@@ -82,7 +82,7 @@ function PrintDialog({ open, onClose, onPrint, model }) {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <button className="icon-btn modal-close" onClick={onClose} aria-label="Close"><I.Close /></button>
         <h2 id="print-title">Print the {model.name.toLowerCase()}</h2>
-        <p className="muted">Print on plain paper, cut out the square and fold along the lines.</p>
+        <p className="muted">The guide prints as a {paperLabel(model)}, the recommended paper size. Print at 100%, cut it out and fold along the lines.</p>
         <label className="check">
           <input type="checkbox" checked={cp} onChange={(e) => setCp(e.target.checked)} />
           <span>
@@ -114,9 +114,13 @@ function PrintSheet({ model, built, opts, color }) {
         <section className="print-page">
           <header className="print-head">
             <h1>{model.name}</h1>
-            <p>Folding guide. Cut along the outer square.</p>
+            <p>Folding guide for a {paperLabel(model)}. Print at 100% (actual size), then cut along the outer square.</p>
           </header>
           <div className="print-cp"><CreasePattern creases={creases} diamond={model.diamond} /></div>
+          <div className="print-scale">
+            <svg width="50mm" height="4mm" viewBox="0 0 50 4"><path d="M0 0v4M50 0v4M0 2h50" stroke="#111" strokeWidth="0.4" fill="none" /></svg>
+            <span>This bar should measure 5 cm. If it doesn&rsquo;t, turn off &ldquo;fit to page&rdquo; in your print settings.</span>
+          </div>
           <div className="print-legend">
             <span><svg width="46" height="8"><line x1="0" y1="4" x2="46" y2="4" stroke="#1f6fd1" strokeWidth="2" strokeDasharray="7 4" /></svg> Valley: folds toward you</span>
             <span><svg width="46" height="8"><line x1="0" y1="4" x2="46" y2="4" stroke="#d23c3c" strokeWidth="2" strokeDasharray="10 3 2 3" /></svg> Mountain: folds away from you</span>
@@ -130,7 +134,7 @@ function PrintSheet({ model, built, opts, color }) {
         <section className="print-page print-steps">
           <header className="print-head">
             <h1>{model.name}, step by step</h1>
-            <p>{built.steps.length} steps. Coloured side shown in tone, white side in white.</p>
+            <p>{built.steps.length} steps. You need a {paperLabel(model)}. Coloured side shown in tone, white side in white.</p>
           </header>
           <ol className="print-grid">
             {built.steps.map((s, i) => (
@@ -233,6 +237,13 @@ export default function App() {
             ))}
           </ul>
           <p className="model-blurb">{model.blurb}</p>
+          <div className="paper-spec">
+            <span className="paper-chip" aria-hidden="true" />
+            <span>
+              <strong>{paperLabel(model)}</strong>
+              <small>{model.paper.note}</small>
+            </span>
+          </div>
         </nav>
 
         <aside className="steps" aria-label="Instructions">
@@ -241,7 +252,7 @@ export default function App() {
               <>
                 <div className="step-count">Finished</div>
                 <h1 className="step-title">Your {model.name.toLowerCase()} is folded</h1>
-                <p className="step-text">Drag to turn it around, or print the folding guide and make one for real.</p>
+                <p className="step-text">Drag to turn it around, or print the folding guide and make one for real from a {paperLabel(model)}.</p>
                 <div className="done-actions">
                   <button className="primary" onClick={() => setPrintOpen(true)}><I.Printer /> Print with guidelines</button>
                   <button className="ghost" onClick={() => player.set({ t: 0, playing: false, target: null })}><I.Restart /> Start over</button>

@@ -10,12 +10,12 @@ const notBody = (f) => f.tag !== 'neck' && f.tag !== 'tail';
 export default {
   id: 'dragon',
   name: 'Dragon',
-  blurb: 'A winged dragon on the classic bird base, with a hooked head and a curled tail.',
+  blurb: 'A winged dragon designed for this app on the traditional bird base: the crane folds first, then a hooked head, a curled tail and open wings.',
   level: 'Intermediate',
   color: '#2fa58b',
   size: 2,
+  paper: { cm: 15, inch: 6, note: 'Square origami paper (kami), coloured on one side. Thin paper makes the neck and head easier.' },
   diamond: true,
-  startFlipped: true,
   steps: [
     ...birdBaseSteps,
     {

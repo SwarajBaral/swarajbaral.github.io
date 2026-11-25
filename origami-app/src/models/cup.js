@@ -9,12 +9,13 @@ export default {
   level: 'Beginner',
   color: '#e9a23b',
   size: 2,
+  paper: { cm: 15, inch: 6, note: 'Any square sheet works. Use waxed or foil paper if it has to hold water.' },
   diamond: true,
   startFlipped: true,
   steps: [
     {
       title: 'Fold in half',
-      text: 'With the white side up, fold the bottom corner up to the top corner.',
+      text: 'Start with a 15 × 15 cm square, white side up, turned like a diamond. Fold the bottom corner up to the top corner.',
       kind: 'valley',
       ops: [{ line: [[s, 0], [-s, 0]], pick: [0, -0.5], select: 'all' }],
     },

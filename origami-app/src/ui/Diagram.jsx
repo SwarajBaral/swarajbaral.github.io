@@ -63,7 +63,7 @@ export default function Diagram({ state, color = '#2fa58b', back = '#f4f1ea', li
 export function CreasePattern({ creases, diamond, valley = '#1f6fd1', mountain = '#d23c3c' }) {
   const r = (p) => (diamond ? [(p[0] + p[1]) / Math.SQRT2, (p[1] - p[0]) / Math.SQRT2] : p);
   return (
-    <svg viewBox="-1.02 -1.02 2.04 2.04" className="cp-svg" role="img" aria-label="Crease pattern">
+    <svg viewBox="-1 -1 2 2" overflow="visible" className="cp-svg" role="img" aria-label="Crease pattern">
       <g transform="scale(1,-1)">
         <rect x="-1" y="-1" width="2" height="2" fill="#fff" stroke="#111" strokeWidth="0.006" />
         {creases.map((c, i) => {

@@ -51,6 +51,8 @@ export default function PaperModel({ built, color, showCreases, onFrame }) {
   const aspect = useThree((st) => st.viewport.aspect);
   const geo = useMemo(() => new THREE.BufferGeometry(), []);
   const lineGeo = useMemo(() => new THREE.BufferGeometry(), []);
+  const softGeo = useMemo(() => new THREE.BufferGeometry(), []);
+  const softLines = useRef();
 
   useEffect(() => { cache.current.clear(); current.current.idx = -1; }, [built]);
 
@@ -89,7 +91,10 @@ export default function PaperModel({ built, color, showCreases, onFrame }) {
       }
     }
     geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
-    lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(prep.edges.length * 6), 3));
+    prep.hard = prep.edges.filter((e) => !e.soft);
+    prep.soft = prep.edges.filter((e) => e.soft);
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(prep.hard.length * 6 + 6), 3));
+    softGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(prep.soft.length * 6 + 6), 3));
     return prep;
   };
 
@@ -115,15 +120,18 @@ export default function PaperModel({ built, color, showCreases, onFrame }) {
     geo.attributes.position.needsUpdate = true;
     geo.computeVertexNormals();
     geo.computeBoundingSphere();
-    const lp = lineGeo.attributes.position.array;
-    o = 0;
-    for (const ed of prep.edges) {
-      const m = mats[ed.face];
-      v.set(ed.a[0], ed.a[1], 0).applyMatrix4(m); lp[o++] = v.x; lp[o++] = v.y; lp[o++] = v.z;
-      v.set(ed.b[0], ed.b[1], 0).applyMatrix4(m); lp[o++] = v.x; lp[o++] = v.y; lp[o++] = v.z;
+    for (const [list, g2] of [[prep.hard, lineGeo], [prep.soft, softGeo]]) {
+      const lp = g2.attributes.position.array;
+      o = 0;
+      for (const ed of list) {
+        const m = mats[ed.face];
+        v.set(ed.a[0], ed.a[1], 0).applyMatrix4(m); lp[o++] = v.x; lp[o++] = v.y; lp[o++] = v.z;
+        v.set(ed.b[0], ed.b[1], 0).applyMatrix4(m); lp[o++] = v.x; lp[o++] = v.y; lp[o++] = v.z;
+      }
+      g2.setDrawRange(0, list.length * 2);
+      g2.attributes.position.needsUpdate = true;
+      g2.computeBoundingSphere();
     }
-    lineGeo.attributes.position.needsUpdate = true;
-    lineGeo.computeBoundingSphere();
 
     // keep the model centred and filling the view as it shrinks
     const a = prep.atomic;
@@ -151,6 +159,7 @@ export default function PaperModel({ built, color, showCreases, onFrame }) {
       }
     }
     if (lines.current) lines.current.visible = showCreases;
+    if (softLines.current) softLines.current.visible = showCreases;
     onFrame && onFrame(t);
   });
 
@@ -160,6 +169,9 @@ export default function PaperModel({ built, color, showCreases, onFrame }) {
       <mesh ref={meshBack} geometry={geo} material={backMat} castShadow receiveShadow />
       <lineSegments ref={lines} geometry={lineGeo}>
         <lineBasicMaterial color="#10201c" transparent opacity={0.38} />
+      </lineSegments>
+      <lineSegments ref={softLines} geometry={softGeo}>
+        <lineBasicMaterial color="#10201c" transparent opacity={0.16} />
       </lineSegments>
       <Line ref={guide} points={[[0, 0, 0], [1, 0, 0]]} color="#ffffff" lineWidth={2} dashed dashSize={0.06} gapSize={0.04} transparent />
     </group>
