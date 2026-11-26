@@ -130,6 +130,27 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .model-name { display: block; font: 600 17px/1.2 var(--display); letter-spacing: -0.01em; }
 .model-meta { display: block; color: var(--muted); font-size: 13px; }
 .model-blurb { color: var(--muted); font-size: 13.5px; margin: 14px 4px 2px; max-width: 34ch; }
+.paper-spec {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 14px 4px 2px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+.paper-spec strong { display: block; color: var(--text); font-weight: 600; font-size: 13.5px; }
+.paper-spec small { display: block; font-size: 12.5px; line-height: 1.4; }
+.paper-chip {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, var(--paper) 50%, #eef0ea 50%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
 
 /* step panel */
 .steps {
@@ -473,7 +494,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .tools .icon-btn[title='Reset view'] { display: none; }
   .tag { display: none; }
   .models { padding: 8px; border-radius: 16px; }
-  .models .panel-title, .model-blurb { display: none; }
+  .models .panel-title, .model-blurb, .paper-spec { display: none; }
   .models ul { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
   .model-card { flex-direction: column; gap: 4px; padding: 6px; text-align: center; }
   .thumb { width: 40px; height: 40px; }
@@ -504,7 +525,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .print-page:last-child { break-after: auto; }
   .print-head h1 { font: 700 26px/1.1 var(--display); margin: 0; }
   .print-head p { margin: 4px 0 12px; color: #444; font-size: 12px; }
-  .print-cp { width: 180mm; height: 180mm; margin: 6mm auto; }
+  .print-cp { width: 150mm; height: 150mm; margin: 6mm auto 4mm; }
+  .print-scale { display: flex; gap: 10px; align-items: center; justify-content: center; font-size: 10.5px; color: #444; margin-bottom: 4mm; }
   .cp-svg { width: 100%; height: 100%; display: block; }
   .print-legend { display: flex; gap: 24px; justify-content: center; font-size: 12px; align-items: center; }
   .print-legend span { display: inline-flex; align-items: center; gap: 8px; }

@@ -36,40 +36,80 @@ const narrow = [
   { line: [[-X[0], X[1]], [0, -s]], pick: [-0.25, -0.5] },
 ];
 
+const H = [[-1, -k], [1, -k]];
+
+// fold, then fold straight back: leaves a crease
+const precrease = (line, pick, back) => [
+  { line, pick, select: 'all', keep: true },
+  { line, pick: back, keep: true },
+];
+
+// Collapse the pre-creased square into a square (preliminary) base.
+// Top half swings down; the left and right corners tuck in between the layers.
+const collapse = {
+  type: 'complex',
+  kind: 'collapse',
+  groups: [
+    { line: [[-s, 0], [s, 0]], pick: [0, 0.5], select: (c) => c[1] > 0 },
+    { line: [[0, 0], [-s / 2, s / 2]], pick: [-1, 0.2], parent: 0, select: (c) => c[1] > 0 && c[0] < 0 && c[1] < -c[0] },
+    { line: [[0, 0], [s / 2, s / 2]], pick: [1, 0.2], parent: 0, select: (c) => c[1] > 0 && c[0] > 0 && c[1] < c[0] },
+    { line: [[0, 0], [-s / 2, -s / 2]], pick: [-1, -0.2], select: (c) => c[1] < 0 && c[0] < 0 && c[1] > c[0] },
+    { line: [[0, 0], [s / 2, -s / 2]], pick: [1, -0.2], select: (c) => c[1] < 0 && c[0] > 0 && c[1] > -c[0] },
+  ],
+};
+
 export const birdBaseSteps = [
   {
-    title: 'Fold in half',
-    text: 'Start white side up with the paper turned like a diamond. Fold the top corner down to the bottom corner to make a triangle.',
+    title: 'Crease both diagonals',
+    text: 'Start with a 15 × 15 cm square, coloured side up, turned like a diamond. Fold it in half corner to corner and unfold, then fold and unfold the other way.',
     kind: 'valley',
-    ops: [{ line: [[-s, 0], [s, 0]], pick: [0, 0.5], select: 'all' }],
+    ops: [
+      ...precrease([[-s, 0], [s, 0]], [0, 0.5], [0, -0.5]),
+      ...precrease([[0, -s], [0, s]], [-0.5, 0.1], [0.5, 0.1]),
+    ],
   },
   {
-    title: 'Reverse fold the left corner',
-    text: 'Push the left corner inside, between the two layers, along a line from the top middle down to the lower edge. The corner lands on the bottom point.',
-    kind: 'inside',
-    ops: [{ kind: 'inside', line: [[0, 0], [-s / 2, -s / 2]], pick: [-1, -0.1] }],
+    title: 'Turn over',
+    text: 'Flip the paper so the white side faces up.',
+    kind: 'turn',
+    ops: [{ type: 'flip' }],
   },
   {
-    title: 'Reverse fold the right corner',
-    text: 'Do the same on the right. You now have a square base: a small diamond with the open end at the bottom.',
-    kind: 'inside',
-    ops: [{ kind: 'inside', line: [[0, 0], [s / 2, -s / 2]], pick: [1, -0.1] }],
+    title: 'Crease side to side',
+    text: 'Fold the paper in half edge to edge and unfold, in both directions.',
+    kind: 'valley',
+    ops: [
+      ...precrease([[-s / 2, -s / 2], [s / 2, s / 2]], [-0.5, 0.3], [0.4, -0.2]),
+      ...precrease([[-s / 2, s / 2], [s / 2, -s / 2]], [0.3, 0.5], [-0.45, -0.3]),
+    ],
   },
   {
-    title: 'Kite fold the front flaps',
-    text: 'Fold the lower edges of the front layer in so they meet on the centre line.',
+    title: 'Collapse into a square base',
+    text: 'Bring the left and right corners down to meet the bottom corner, letting the paper fold along the creases. Flatten it into a small diamond: the square base.',
+    kind: 'collapse',
+    ops: [collapse],
+  },
+  {
+    title: 'Fold the edges to the centre',
+    text: 'Fold the left and right lower edges of the top layer in to meet the vertical centre line.',
     kind: 'valley',
     ops: kites,
   },
   {
-    title: 'Unfold the kite',
-    text: 'Open both flaps again. Those creases guide the next move.',
+    title: 'Fold the top down',
+    text: 'Fold the top corner down over the flaps, along the line where their top edges sit.',
+    kind: 'valley',
+    ops: [{ line: H, pick: [0, -0.15] }],
+  },
+  {
+    title: 'Unfold the last three folds',
+    text: 'Open the top corner and both side flaps again. You now have the creases for the petal fold.',
     kind: 'unfold',
-    ops: unkites,
+    ops: [{ line: H, pick: [0, -0.68], keep: true }, ...unkites.map((o) => ({ ...o, keep: true }))],
   },
   {
     title: 'Petal fold',
-    text: 'Lift the bottom corner of the front layer up along the horizontal crease. The sides collapse inwards along the kite creases and meet in the middle.',
+    text: 'Lift the bottom corner of the top layer up along the horizontal crease. The sides fold inward along the creases and meet at the centre line.',
     kind: 'petal',
     ops: [petal('wingA')],
   },
@@ -80,26 +120,20 @@ export const birdBaseSteps = [
     ops: [{ type: 'flip' }],
   },
   {
-    title: 'Kite fold the back',
-    text: 'Repeat the kite folds on this side.',
+    title: 'Crease the edges to the centre',
+    text: 'Fold the lower edges to the centre line and unfold them again.',
     kind: 'valley',
-    ops: kites,
-  },
-  {
-    title: 'Unfold the kite',
-    text: 'Open the flaps again to leave the creases.',
-    kind: 'unfold',
-    ops: unkites,
+    ops: [...kites, ...unkites.map((o) => ({ ...o, keep: true }))],
   },
   {
     title: 'Petal fold the back',
-    text: 'Lift the bottom corner up and collapse the sides inwards. This is the bird base.',
+    text: 'Lift the bottom corner up and let the sides fold in, just as before. This is the bird base.',
     kind: 'petal',
     ops: [petal('wingB')],
   },
   {
-    title: 'Narrow the legs',
-    text: 'Fold the lower edges of the top layers to the centre line to make the bottom flaps thin.',
+    title: 'Narrow the bottom flaps',
+    text: 'Fold the lower left and right edges of the top layer to the centre line. This makes the neck and tail thin.',
     kind: 'valley',
     ops: narrow,
   },
@@ -111,7 +145,7 @@ export const birdBaseSteps = [
   },
   {
     title: 'Narrow the other side',
-    text: 'Fold these lower edges to the centre as well.',
+    text: 'Fold these lower edges to the centre line as well.',
     kind: 'valley',
     ops: narrow,
   },

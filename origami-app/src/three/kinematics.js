@@ -48,18 +48,18 @@ export function prepare(atomic) {
     for (let e = 0; e < n; e++) {
       const a = f.poly[e], b = f.poly[(e + 1) % n];
       const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
-      let covered = false, shared = false;
+      let covered = false, shared = false, soft = false;
       for (let j = 0; j < faces.length && !covered; j++) {
         if (j === i) continue;
         const seg = sharedEdge([a, b], faces[j].poly);
         if (!seg) continue;
         shared = true;
         const sl = Math.hypot(seg[1][0] - seg[0][0], seg[1][1] - seg[0][1]);
-        if (sl > len - 1e-5 && sameT(f.F, faces[j].F) && f.group === faces[j].group) covered = true;
-        // avoid drawing a shared crease twice
-        if (sl > len - 1e-5 && j < i) covered = true;
+        if (sl < len - 1e-5) continue;
+        if (j < i) covered = true; // draw each shared crease once
+        else if (sameT(f.F, faces[j].F) && f.group === faces[j].group) soft = true; // unfolded crease
       }
-      if (!covered) edges.push({ face: i, a, b, boundary: !shared });
+      if (!covered) edges.push({ face: i, a, b, boundary: !shared, soft });
     }
   });
   // residual z correction so each face ends exactly at its new layer height

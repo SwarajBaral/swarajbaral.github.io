@@ -11,12 +11,12 @@ const wingLine = [[-1, -0.0628], [1, -0.0628]];
 export default {
   id: 'crane',
   name: 'Crane',
-  blurb: 'The traditional orizuru. Same bird base as the dragon, finished with long wings.',
+  blurb: 'The traditional Japanese orizuru, folded from the bird base with the classic reverse-folded neck and tail.',
   level: 'Easy',
   color: '#d94f5c',
   size: 2,
+  paper: { cm: 15, inch: 6, note: 'Square origami paper (kami) or patterned chiyogami, coloured on one side.' },
   diamond: true,
-  startFlipped: true,
   steps: [
     ...birdBaseSteps,
     {

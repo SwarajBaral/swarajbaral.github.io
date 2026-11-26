@@ -3,6 +3,7 @@ export const KIND = {
   mountain: { label: 'Mountain fold', hint: 'Fold away from you so a ridge forms.' },
   inside: { label: 'Inside reverse fold', hint: 'The point tucks in between the layers.' },
   outside: { label: 'Outside reverse fold', hint: 'The layers wrap around the outside.' },
+  collapse: { label: 'Collapse', hint: 'Several creases fold at once, guided by the pre-creases.' },
   petal: { label: 'Petal fold', hint: 'One layer lifts while its sides collapse inward.' },
   turn: { label: 'Turn over', hint: 'Flip the model, left to right.' },
   unfold: { label: 'Unfold', hint: 'Open up again, keeping the crease.' },
@@ -34,3 +35,5 @@ export function flatFinal(built) {
   }
   return built.final;
 }
+
+export const paperLabel = (m) => `${m.paper.cm} × ${m.paper.cm} cm (${m.paper.inch} × ${m.paper.inch} in) square`;

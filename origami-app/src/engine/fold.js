@@ -252,7 +252,8 @@ function applyFold(state, op) {
   };
 
   // 5. merge split halves that ended up with the same transform
-  const merged = mergePairs(ordered, splitPairs);
+  // precreases (fold-and-unfold) keep their crease lines
+  const merged = op.keep ? ordered : mergePairs(ordered, splitPairs);
   return { state: { faces: merged }, atomic };
 }
 
